@@ -10,21 +10,23 @@ import userRouter from "./router/userRoute.js"
 import timelineRouter from "./router/timelineRoute.js"
 import applicationsRouter from "./router/softwareApplicationsRoute.js"
 import skillRouter from "./router/skillRoute.js"
-import projrctRouter from "./router/projectRoute.js"
+import projectRouter from "./router/projectRoute.js"
 
-const app = express()
-dotenv.config({ path: "./config/.env" });
+const app = express();
+dotenv.config({ path: "./config/config.env" });
 
-const corsOptions = {
-  origin: [process.env.PORTFOLIO_URL, process.env.DASHBOARD_URL],
-  credentials: true // Allow credentials
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: [process.env.PORTFOLIO_URL, process.env.DASHBOARD_URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 
 app.use(
     fileUpload({
@@ -38,7 +40,7 @@ app.use("/user", userRouter);
 app.use("/timeline", timelineRouter);
 app.use("/softwareApplications", applicationsRouter);
 app.use("/skill", skillRouter);
-app.use("/project", projrctRouter);
+app.use("/project", projectRouter);
 
 dbConnection();
 app.use(errorMiddleware)
